@@ -8,7 +8,7 @@ import passwordsRouter from '@modules/users/infra/http/routes/passwords.routes';
 
 const routes = Router();
 
-routes.use('/files', express.static(uploadConfig.directory));
+routes.use('/files', express.static(uploadConfig.uploadsFolder));
 routes.use('/appointments', appointmentsRouter);
 routes.use('/users', usersRouter);
 routes.use('/sessions', sessionsRouter);
