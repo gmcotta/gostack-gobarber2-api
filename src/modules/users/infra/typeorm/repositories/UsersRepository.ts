@@ -1,5 +1,5 @@
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
-import { Repository, getRepository } from 'typeorm';
+import { Repository, getRepository, Not } from 'typeorm';
 
 import User from '@modules/users/infra/typeorm/entities/Users';
 import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
@@ -40,6 +40,21 @@ class UserRepository implements IUsersRepository {
     await this.ormRepository.save(user);
 
     return user;
+  }
+
+  public async findAllProviders(except_user_id?: string): Promise<User[]> {
+    let users: User[];
+    if (except_user_id) {
+      users = await this.ormRepository.find({
+        where: {
+          id: Not(except_user_id),
+        },
+      });
+    } else {
+      users = await this.ormRepository.find();
+    }
+
+    return users;
   }
 }
 
