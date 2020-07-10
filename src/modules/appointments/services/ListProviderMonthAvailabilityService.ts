@@ -1,5 +1,5 @@
 import { inject, injectable } from 'tsyringe';
-import { getDaysInMonth, getDate } from 'date-fns';
+import { getDaysInMonth, getDate, isAfter, startOfDay } from 'date-fns';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
 interface RequestDTO {
@@ -38,9 +38,14 @@ class ListProviderMonthAvailabilityService {
       const appointmentsInDay = appointments.filter(appointment => {
         return getDate(appointment.date) === day;
       });
+
+      const currentDate = new Date(startOfDay(Date.now()));
+      const compareDate = new Date(year, month - 1, day, 0, 0, 0, 1);
+
       return {
         day,
-        available: appointmentsInDay.length < 10,
+        available:
+          appointmentsInDay.length < 10 && isAfter(compareDate, currentDate),
       };
     });
 
