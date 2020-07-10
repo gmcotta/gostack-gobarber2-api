@@ -5,7 +5,6 @@ import IAppointmentsRepository from '@modules/appointments/repositories/IAppoint
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
 import IFindAllAppointmentsInMonthFromProviderDTO from '@modules/appointments/dtos/IFindAllAppointmentsInMonthFromProviderDTO';
-import AppError from '@shared/errors/AppError';
 
 class AppointmentsRepository implements IAppointmentsRepository {
   private appointments: Appointment[] = [];
@@ -38,7 +37,7 @@ class AppointmentsRepository implements IAppointmentsRepository {
   }: IFindAllAppointmentsInMonthFromProviderDTO): Promise<Appointment[]> {
     const findAppointments = this.appointments.filter(
       appointment =>
-        appointment.id === provider_id &&
+        appointment.provider_id === provider_id &&
         getMonth(appointment.date) + 1 === month &&
         getYear(appointment.date) === year,
     );
