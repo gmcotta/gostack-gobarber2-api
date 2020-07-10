@@ -11,7 +11,7 @@ class ProviderMonthAvailabilityController {
       ListProviderMonthAvailabilityService,
     );
 
-    const appointments = listProviderMonthAvailability.execute({
+    const appointments = await listProviderMonthAvailability.execute({
       provider_id,
       month,
       year,
