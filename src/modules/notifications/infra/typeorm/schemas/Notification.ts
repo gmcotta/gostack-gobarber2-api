@@ -4,6 +4,7 @@ import {
   ObjectIdColumn,
   Column,
   CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('notifications')
