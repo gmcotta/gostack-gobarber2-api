@@ -1,5 +1,8 @@
+import { inject, injectable } from 'tsyringe';
+import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
+
 interface RequestDTO {
-  user_id: string;
+  provider_id: string;
   month: number;
   year: number;
 }
@@ -9,15 +12,23 @@ type ResponseDTO = Array<{
   available: boolean;
 }>;
 
+@injectable()
 class ListProviderMonthAvailabilityService {
-  constructor() {}
+  constructor(
+    @inject('AppointmentsRepository')
+    private appointmentsRepository: IAppointmentsRepository,
+  ) {}
 
   public async execute({
-    user_id,
+    provider_id,
     month,
     year,
   }: RequestDTO): Promise<ResponseDTO> {
-    return [{ day: 1, available: true }];
+    const appointments = await this.appointmentsRepository.findAllAppointmentsInMonthFromProvider(
+      { provider_id, month, year },
+    );
+
+    return appointments;
   }
 }
 
