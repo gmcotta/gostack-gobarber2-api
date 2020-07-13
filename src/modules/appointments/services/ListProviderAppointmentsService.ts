@@ -40,8 +40,6 @@ class ListProviderAppointmentsService {
         },
       );
 
-      console.log('Buscou do postgres');
-
       await this.cacheProvider.save(cacheKey, appointments);
     }
 
