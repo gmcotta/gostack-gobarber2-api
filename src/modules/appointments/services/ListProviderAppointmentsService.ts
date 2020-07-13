@@ -25,19 +25,25 @@ class ListProviderAppointmentsService {
     month,
     day,
   }: RequestDTO): Promise<Appointment[]> {
-    const cacheData = await this.cacheProvider.recover('chave');
-    console.log(cacheData);
-
-    const appointments = await this.appointmentsRepository.findAllAppointmentsInDayFromProvider(
-      {
-        provider_id,
-        year,
-        month,
-        day,
-      },
+    const cacheKey = `provider-appointments:${provider_id}:${year}_${month}_${day}`;
+    let appointments = await this.cacheProvider.recover<Appointment[]>(
+      cacheKey,
     );
 
-    // await this.cacheProvider.save('chave', 'valor');
+    if (!appointments) {
+      appointments = await this.appointmentsRepository.findAllAppointmentsInDayFromProvider(
+        {
+          provider_id,
+          year,
+          month,
+          day,
+        },
+      );
+
+      console.log('Buscou do postgres');
+
+      await this.cacheProvider.save(cacheKey, appointments);
+    }
 
     return appointments;
   }
